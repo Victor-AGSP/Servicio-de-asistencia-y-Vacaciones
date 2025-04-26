@@ -14,10 +14,9 @@ const Vacaciones = () => {
   const vacacionesSimuladas = [
     { inicio: '2025-06-10', fin: '2025-06-20', diasTomados: 10 },
     { inicio: '2025-12-22', fin: '2025-12-31', diasTomados: 8 },
-    // Más periodos si quieres
   ];
 
-  const diasDisponibles = 20; // Supongamos que el usuario tiene 20 días anuales
+  const diasDisponibles = 20; 
   const diasUsados = vacacionesSimuladas.reduce((acc, vacacion) => acc + vacacion.diasTomados, 0);
   const diasRestantes = diasDisponibles - diasUsados;
 

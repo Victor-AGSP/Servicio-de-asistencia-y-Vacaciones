@@ -17,7 +17,6 @@ const Asistencia = () => {
     { fecha: '2025-04-03', entrada: '08:15', salida: '17:05' },
     { fecha: '2025-04-04', entrada: '08:02', salida: '16:55' },
     { fecha: '2025-04-05', entrada: '08:00', salida: '17:00' },
-    // Más días si quieres
   ];
 
   return (

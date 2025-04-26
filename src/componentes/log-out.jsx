@@ -12,10 +12,10 @@ const LogOut = () => {
     logout();
 
     // Redirigimos al usuario a la página de login o inicio después de cerrar sesión
-    navigate('/'); // Puedes cambiar '/login' por '/' si quieres redirigir al inicio
+    navigate('/'); 
   }, [logout, navigate]);
 
-  return <div>Redirigiendo...</div>; // Puedes mostrar un mensaje temporal mientras redirige
+  return <div>Redirigiendo...</div>; 
 };
 
 export default LogOut;
