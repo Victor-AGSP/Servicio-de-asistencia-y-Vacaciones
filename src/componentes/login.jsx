@@ -1,15 +1,37 @@
 // src/pages/Login.jsx
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';  // Importamos useNavigate
 
 const Login = () => {
+  const { login } = useAuth();
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
+  const navigate = useNavigate(); // Usamos el hook useNavigate
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Usuario:', usuario);
-    console.log('Clave:', clave);
-    // Aquí iría tu lógica para enviar los datos al backend
+
+    // Datos predefinidos de usuario
+    const usuarioCorrecto = 'admin';
+    const claveCorrecta = '1234';
+
+    if (usuario === usuarioCorrecto && clave === claveCorrecta) {
+      // Si las credenciales son correctas, logueamos al usuario
+      login({
+        nombre: 'Victor Sepúlveda Parra',
+        correo: 'victor@example.com',
+        puesto: 'Desarrollador Frontend',
+        departamento: 'Tecnología',
+        fechaIngreso: '15/03/2023',
+      });
+      console.log('Login exitoso');
+
+      // Redirigimos al usuario al inicio
+      navigate('/'); // Redirige a la página de inicio
+    } else {
+      alert('Usuario o contraseña incorrectos');
+    }
   };
 
   return (

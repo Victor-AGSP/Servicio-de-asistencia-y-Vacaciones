@@ -1,38 +1,155 @@
+/* Importación de fuente moderna */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+/* Estilos generales para el cuerpo de la página */
+body {
+  background-color: #f0f2f5; /* Fondo claro pero más elegante */
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #2c2c2c; /* Color de texto más sobrio */
+}
+
+/* Estilo del contenedor principal */
 .App {
   text-align: center;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }
 
+/* Estilo del logo */
 .App-logo {
-  height: 40vmin;
+  height: 30vmin;
   pointer-events: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Animación para el logo */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
 
+/* Encabezado principal */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #283593; /* Azul más serio */
+  color: white;
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  font-size: calc(14px + 2vmin);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
 }
 
+/* Enlaces dentro de la aplicación */
 .App-link {
-  color: #61dafb;
+  color: #64b5f6;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
+.App-link:hover {
+  color: #455a64; /* Gris azulado en hover */
+  transform: scale(1.08);
+}
+
+/* Animación de giro del logo */
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Estilo del menú de navegación */
+nav {
+  background-color: #212121;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  font-size: 1.1rem;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+nav a:hover {
+  background-color: #616161; /* Gris plomo en hover */
+  transform: scale(1.05);
+}
+
+/* Estilo de botones */
+button {
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: #616161; /* Gris plomo en hover */
+  transform: scale(1.05);
+}
+
+/* Sección de contenido tipo perfil */
+.profile-content {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 1rem;
+    font-size: calc(12px + 2vmin);
   }
-  to {
-    transform: rotate(360deg);
+
+  .App-logo {
+    height: 25vmin;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 0.8rem;
   }
 }
