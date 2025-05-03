@@ -15,6 +15,7 @@ const Login = () => {
       // Hacemos la solicitud POST al servidor en Glitch
 
       console.log('Enviando datos:', { email: usuario, password: clave }); // Verificamos los datos enviados
+      console.log("URL: https://ringed-dapper-farmer.glitch.me/login"); // Verificamos la URL
       const response = await fetch("https://ringed-dapper-farmer.glitch.me/login", {
         method: "POST",
         headers: {
@@ -24,7 +25,9 @@ const Login = () => {
           email: usuario,
           password: clave,
         }),
+        credentials: 'include',  // Aquí estamos permitiendo el envío de cookies o credenciales
       });
+
 
       console.log('Response:', response); // Verificamos la respuesta del servidor
       const data = await response.json();
