@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';  // Importamos useNavigate
@@ -9,28 +8,48 @@ const Login = () => {
   const [clave, setClave] = useState('');
   const navigate = useNavigate(); // Usamos el hook useNavigate
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Datos predefinidos de usuario
-    const usuarioCorrecto = 'admin';
-    const claveCorrecta = '1234';
+    try {
+      // Hacemos la solicitud POST al servidor en Glitch
 
-    if (usuario === usuarioCorrecto && clave === claveCorrecta) {
-      // Si las credenciales son correctas, logueamos al usuario
-      login({
-        nombre: 'Victor Sepúlveda Parra',
-        correo: 'victor@example.com',
-        puesto: 'Desarrollador Frontend',
-        departamento: 'Tecnología',
-        fechaIngreso: '15/03/2023',
+      console.log('Enviando datos:', { email: usuario, password: clave }); // Verificamos los datos enviados
+      const response = await fetch("https://ringed-dapper-farmer.glitch.me/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: usuario,
+          password: clave,
+        }),
       });
-      console.log('Login exitoso');
 
-      // Redirigimos al usuario al inicio
-      navigate('/'); // Redirige a la página de inicio
-    } else {
-      alert('Usuario o contraseña incorrectos');
+      console.log('Response:', response); // Verificamos la respuesta del servidor
+      const data = await response.json();
+
+      if (response.ok) {
+        // Si el login es exitoso, guarda los datos en el contexto
+        login({
+          nombre: data.nombre,  // Suponiendo que el servidor te manda estos datos
+          correo: data.email,
+          puesto: data.puesto || "Sin puesto",
+          departamento: data.departamento || "Sin departamento",
+          fechaIngreso: data.fechaIngreso || "Desconocida",
+        });
+
+        console.log('Login exitoso');
+
+        // Redirigimos al usuario al inicio
+        navigate('/'); // Redirige a la página de inicio
+      } else {
+        // Si la respuesta del servidor no es ok, mostramos el error
+        alert(data.message || "Credenciales inválidas");
+      }
+    } catch (error) {
+      console.error("Error de conexión:", error);
+      alert("No se pudo conectar al servidor");
     }
   };
 
