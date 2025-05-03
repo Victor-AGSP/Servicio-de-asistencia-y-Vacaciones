@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 
 // Simulamos empleados con sus vacaciones
 const empleadosConVacaciones = {
-  'Empleado 1': [
+  'Juan Pérez': [
     { inicio: '2025-03-01', fin: '2025-03-10', diasTomados: 10 },
     { inicio: '2025-07-15', fin: '2025-07-20', diasTomados: 6 },
   ],
-  'Empleado 2': [
+  'María López': [
     { inicio: '2025-04-05', fin: '2025-04-12', diasTomados: 8 },
   ],
-  'Empleado 3': [
+  'Carlos García': [
     { inicio: '2025-01-20', fin: '2025-01-30', diasTomados: 11 },
     { inicio: '2025-10-01', fin: '2025-10-05', diasTomados: 5 },
   ]
