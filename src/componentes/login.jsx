@@ -15,7 +15,6 @@ const Login = () => {
       // Hacemos la solicitud POST al servidor en Glitch
 
       console.log('Enviando datos:', { email: usuario, password: clave }); // Verificamos los datos enviados
-      console.log("URL: https://ringed-dapper-farmer.glitch.me/login"); // Verificamos la URL
       const response = await fetch("https://ringed-dapper-farmer.glitch.me/login", {
         method: "POST",
         headers: {
@@ -35,11 +34,10 @@ const Login = () => {
       if (response.ok) {
         // Si el login es exitoso, guarda los datos en el contexto
         login({
-          nombre: data.nombre,  // Suponiendo que el servidor te manda estos datos
-          correo: data.email,
-          puesto: data.puesto || "Sin puesto",
-          departamento: data.departamento || "Sin departamento",
-          fechaIngreso: data.fechaIngreso || "Desconocida",
+          nombre: data.nombre,
+          email: data.email,
+          empresa: data.empresa,
+          rango: data.rango,
         });
 
         console.log('Login exitoso');
