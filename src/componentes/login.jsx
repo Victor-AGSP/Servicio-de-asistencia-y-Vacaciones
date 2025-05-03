@@ -1,56 +1,41 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';  // Importamos useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { login } = useAuth();
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
-  const navigate = useNavigate(); // Usamos el hook useNavigate
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      // Hacemos la solicitud POST al servidor en Glitch
+    let datosUsuario = null;
 
-      console.log('Enviando datos:', { email: usuario, password: clave }); // Verificamos los datos enviados
-      const response = await fetch("https://ringed-dapper-farmer.glitch.me/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: usuario,
-          password: clave,
-        }),
-        credentials: 'include',  // Aquí estamos permitiendo el envío de cookies o credenciales
-      });
+    if (usuario === 'admin' && clave === '1234') {
+      datosUsuario = {
+        nombre: 'Admin',
+        correo: 'admin@empresa.com',
+        puesto: 'jefe',
+        departamento: 'Dirección Ejecutiva',
+        fechaIngreso: '2020-01-10',
+      };
+    } else if (usuario === 'empleado' && clave === '1234') {
+      datosUsuario = {
+        nombre: 'Juan Pérez',
+        correo: 'empleado@empresa.com',
+        puesto: 'empleado',
+        departamento: 'Desarrollo',
+        fechaIngreso: '2022-07-18',
+      };
+    }
 
-
-      console.log('Response:', response); // Verificamos la respuesta del servidor
-      const data = await response.json();
-
-      if (response.ok) {
-        // Si el login es exitoso, guarda los datos en el contexto
-        login({
-          nombre: data.nombre,
-          email: data.email,
-          empresa: data.empresa,
-          rango: data.rango,
-        });
-
-        console.log('Login exitoso');
-
-        // Redirigimos al usuario al inicio
-        navigate('/'); // Redirige a la página de inicio
-      } else {
-        // Si la respuesta del servidor no es ok, mostramos el error
-        alert(data.message || "Credenciales inválidas");
-      }
-    } catch (error) {
-      console.error("Error de conexión:", error);
-      alert("No se pudo conectar al servidor");
+    if (datosUsuario) {
+      login(datosUsuario);
+      navigate('/');
+    } else {
+      alert("Credenciales inválidas");
     }
   };
 
