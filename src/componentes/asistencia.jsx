@@ -3,7 +3,6 @@ import { useAuth } from '../context/AuthContext';
 
 const Asistencia = () => {
   const { usuario } = useAuth();
-  const [mesSeleccionado, setMesSeleccionado] = useState('abril');
   const [asistencias, setAsistencias] = useState([]);
   const [fecha, setFecha] = useState('');
   const [entrada, setEntrada] = useState('08:00');
@@ -79,29 +78,6 @@ const Asistencia = () => {
 
       {/* Resumen del Usuario */}
       <section style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', maxWidth: '1000px', margin: '2rem auto', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>👤 Resumen de {usuario.nombre}</h2>
-        <p><strong>Puesto:</strong> {usuario.puesto}</p>
-        <p><strong>Departamento:</strong> {usuario.departamento}</p>
-        <p><strong>Fecha de Ingreso:</strong> {usuario.fechaIngreso}</p>
-        <p><strong>Mes seleccionado:</strong> {mesSeleccionado.charAt(0).toUpperCase() + mesSeleccionado.slice(1)}</p>
-
-        {/* Selector de Mes */}
-        <div style={{ marginTop: '1.5rem', marginBottom: '2rem' }}>
-          <label htmlFor="mes" style={{ marginRight: '1rem', fontWeight: 'bold' }}>Selecciona mes:</label>
-          <select
-            id="mes"
-            value={mesSeleccionado}
-            onChange={(e) => setMesSeleccionado(e.target.value)}
-            style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
-          >
-            <option value="enero">Enero</option>
-            <option value="febrero">Febrero</option>
-            <option value="marzo">Marzo</option>
-            <option value="abril">Abril</option>
-            <option value="mayo">Mayo</option>
-            <option value="junio">Junio</option>
-          </select>
-        </div>
 
         {/* Formulario para agregar nueva asistencia */}
         <div style={{ marginBottom: '2rem' }}>

@@ -1,88 +1,156 @@
-// src/pages/Vacaciones.jsx
-import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext'; // Importamos el contexto
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const Vacaciones = () => {
-  const { usuario } = useAuth(); // Sacamos el usuario del contexto
-  const [añoSeleccionado, setAñoSeleccionado] = useState('2025');
+  const { usuario } = useAuth();
+  const [vacaciones, setVacaciones] = useState([]);
+  const [inicio, setInicio] = useState('');
+  const [fin, setFin] = useState('');
+
+  useEffect(() => {
+    if (usuario?.correo) {
+      const data = localStorage.getItem(`vacaciones_${usuario.correo}`);
+      setVacaciones(data ? JSON.parse(data) : []);
+    }
+  }, [usuario]);
+
+  useEffect(() => {
+    if (usuario?.correo) {
+      localStorage.setItem(`vacaciones_${usuario.correo}`, JSON.stringify(vacaciones));
+    }
+  }, [vacaciones, usuario]);
+
+  const calcularDias = (inicioStr, finStr) => {
+    const inicioDate = new Date(inicioStr);
+    const finDate = new Date(finStr);
+    const diff = (finDate - inicioDate) / (1000 * 60 * 60 * 24) + 1;
+    return diff > 0 ? diff : 0;
+  };
+
+  const agregarVacaciones = () => {
+    if (!inicio || !fin) {
+      alert('Selecciona ambas fechas');
+      return;
+    }
+
+    const diasTomados = calcularDias(inicio, fin);
+    if (diasTomados <= 0) {
+      alert('La fecha final debe ser posterior a la inicial');
+      return;
+    }
+
+    const nueva = { inicio, fin, diasTomados };
+    setVacaciones(prev => [...prev, nueva]);
+    setInicio('');
+    setFin('');
+  };
+
+  const borrarVacacion = (index) => {
+    const nuevas = vacaciones.filter((_, i) => i !== index);
+    setVacaciones(nuevas);
+  };
 
   if (!usuario) {
     return <p style={{ padding: '2rem', textAlign: 'center' }}>No estás logueado.</p>;
   }
 
-  // Simulamos registros de vacaciones para el usuario (luego puedes traerlos de la base de datos)
-  const vacacionesSimuladas = [
-    { inicio: '2025-06-10', fin: '2025-06-20', diasTomados: 10 },
-    { inicio: '2025-12-22', fin: '2025-12-31', diasTomados: 8 },
-  ];
-
-  const diasDisponibles = 20; 
-  const diasUsados = vacacionesSimuladas.reduce((acc, vacacion) => acc + vacacion.diasTomados, 0);
+  const diasDisponibles = 20;
+  const diasUsados = vacaciones.reduce((acc, v) => acc + v.diasTomados, 0);
   const diasRestantes = diasDisponibles - diasUsados;
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f4f7fa', minHeight: '100vh', padding: '2rem' }}>
       
-      {/* Título */}
       <section style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', maxWidth: '1000px', margin: '2rem auto', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-        <h1 style={{ textAlign: 'center', fontSize: '2.5rem', marginBottom: '1rem' }}>🏖️ Registro de Vacaciones</h1>
+        <h1 style={{ textAlign: 'center', fontSize: '2.5rem', marginBottom: '1rem' }}>🌴 Vacaciones</h1>
         <p style={{ textAlign: 'center', fontSize: '1.2rem', fontWeight: '300' }}>
-          Consulta y gestiona tus días de descanso.
+          Administra tus días de vacaciones.
         </p>
       </section>
 
-      {/* Resumen del Usuario */}
       <section style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', maxWidth: '1000px', margin: '2rem auto', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>👤 Resumen de {usuario.nombre}</h2>
-        <p><strong>Puesto:</strong> {usuario.puesto}</p>
-        <p><strong>Departamento:</strong> {usuario.departamento}</p>
-        <p><strong>Fecha de Ingreso:</strong> {usuario.fechaIngreso}</p>
-        <p><strong>Año seleccionado:</strong> {añoSeleccionado}</p>
-
-        {/* Selector de Año */}
-        <div style={{ marginTop: '1.5rem', marginBottom: '2rem' }}>
-          <label htmlFor="año" style={{ marginRight: '1rem', fontWeight: 'bold' }}>Selecciona año:</label>
-          <select
-            id="año"
-            value={añoSeleccionado}
-            onChange={(e) => setAñoSeleccionado(e.target.value)}
+        
+        <div style={{ marginBottom: '2rem' }}>
+          <label htmlFor="inicio" style={{ marginRight: '1rem', fontWeight: 'bold' }}>Inicio:</label>
+          <input
+            type="date"
+            id="inicio"
+            value={inicio}
+            onChange={(e) => setInicio(e.target.value)}
             style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+          />
+        </div>
+
+        <div style={{ marginBottom: '2rem' }}>
+          <label htmlFor="fin" style={{ marginRight: '1rem', fontWeight: 'bold' }}>Fin:</label>
+          <input
+            type="date"
+            id="fin"
+            value={fin}
+            onChange={(e) => setFin(e.target.value)}
+            style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+          />
+        </div>
+
+        <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
+          <button
+            onClick={agregarVacaciones}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#3f51b5',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
           >
-            <option value="2025">2025</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            {/* Agrega más si quieres */}
-          </select>
+            Agregar vacaciones
+          </button>
         </div>
 
-        {/* Resumen de Vacaciones */}
-        <div style={{ marginBottom: '2rem', backgroundColor: '#e3f2fd', padding: '1rem', borderRadius: '8px' }}>
-          <p><strong>Días disponibles:</strong> {diasDisponibles} días</p>
-          <p><strong>Días tomados:</strong> {diasUsados} días</p>
-          <p><strong>Días restantes:</strong> {diasRestantes} días</p>
+        <div style={{ marginBottom: '1rem', textAlign: 'center', fontWeight: 'bold', fontSize: '1.1rem' }}>
+          Días disponibles: {diasDisponibles} | Usados: {diasUsados} | Restantes: {diasRestantes}
         </div>
 
-        {/* Tabla de Vacaciones */}
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead style={{ backgroundColor: '#00acc1', color: '#fff' }}>
+            <thead style={{ backgroundColor: '#3f51b5', color: '#fff' }}>
               <tr>
                 <th style={{ padding: '1rem', border: '1px solid #ddd' }}>Inicio</th>
                 <th style={{ padding: '1rem', border: '1px solid #ddd' }}>Fin</th>
                 <th style={{ padding: '1rem', border: '1px solid #ddd' }}>Días Tomados</th>
+                <th style={{ padding: '1rem', border: '1px solid #ddd' }}>Acción</th>
               </tr>
             </thead>
             <tbody>
-              {vacacionesSimuladas.map((vacacion, index) => (
+              {vacaciones.map((v, index) => (
                 <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#fff' }}>
-                  <td style={{ padding: '1rem', border: '1px solid #ddd' }}>{vacacion.inicio}</td>
-                  <td style={{ padding: '1rem', border: '1px solid #ddd' }}>{vacacion.fin}</td>
-                  <td style={{ padding: '1rem', border: '1px solid #ddd' }}>{vacacion.diasTomados} días</td>
+                  <td style={{ padding: '1rem', border: '1px solid #ddd' }}>{v.inicio}</td>
+                  <td style={{ padding: '1rem', border: '1px solid #ddd' }}>{v.fin}</td>
+                  <td style={{ padding: '1rem', border: '1px solid #ddd' }}>{v.diasTomados}</td>
+                  <td style={{ padding: '1rem', border: '1px solid #ddd' }}>
+                    <button
+                      onClick={() => borrarVacacion(index)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        backgroundColor: '#f44336',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '1rem'
+                      }}
+                    >
+                      Borrar
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
       </section>
     </div>
   );
